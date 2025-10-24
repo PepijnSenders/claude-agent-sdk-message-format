@@ -83,20 +83,28 @@ messages.forEach(message => console.log(formatMessage(message)));
 Transform JSON output directly from Claude CLI or any other source:
 
 ```bash
-# Format messages from Claude CLI
+# Read from stdin (pipe from Claude CLI)
 claude -p --output-format json --dangerously-skip-permissions "test" | npx claude-pretty-printer
 
-# Format from a JSON file
-cat messages.json | npx claude-pretty-printer
+# Read from file (multi-line JSON)
+npx claude-pretty-printer messages.txt
 
-# Format single message
-echo '{"type":"assistant","message":{"content":"Hello"}}' | npx claude-pretty-printer
+# Inline JSON (single message)
+npx claude-pretty-printer '{"type":"assistant","message":{"content":"Hello"}}'
+
+# Format from file with relative path
+npx claude-pretty-printer ./data/messages.json
 
 # Show help
 npx claude-pretty-printer --help
 ```
 
-**CLI Input Format**: Each line should be a complete JSON object representing an SDK message. The CLI processes JSON line by line from stdin.
+**Input Methods:**
+- **Stdin**: Pipe JSON messages line by line (default behavior)
+- **File**: Read multi-line JSON from a file (one message per line)
+- **Inline**: Format single JSON object as argument
+
+**CLI Input Format**: Each line should be a complete JSON object representing an SDK message. The CLI automatically detects the input method based on how you call it.
 
 ## What It Formats
 
