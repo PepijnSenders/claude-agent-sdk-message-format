@@ -2,6 +2,13 @@ import { describe, it, expect, beforeEach, afterEach } from 'bun:test';
 import { formatMessage } from '../src/index';
 import type { SDKMessage } from '@anthropic-ai/claude-agent-sdk';
 
+// Helper function to generate proper UUID v4 format
+function createTestUUID(seed: number): string {
+  // Generate a consistent UUID based on the seed number
+  const hex = (seed + 0x550e8400e29b41d4).toString(16).padStart(16, '0');
+  return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}466655440000`;
+}
+
 describe('formatMessage', () => {
   // Mock process.stdout.columns for consistent testing
   const originalColumns = process.stdout.columns;
@@ -25,7 +32,7 @@ describe('formatMessage', () => {
   describe('Assistant Messages', () => {
     it('should format text content', () => {
       const message: SDKMessage = {
-        uuid: 'test-assistant-1',
+        uuid: createTestUUID(1),
         session_id: 'session-123',
         type: 'assistant',
         message: {
@@ -58,7 +65,7 @@ describe('formatMessage', () => {
 
     it('should format tool use blocks', () => {
       const message: SDKMessage = {
-        uuid: 'test-assistant-2',
+        uuid: createTestUUID(2),
         session_id: 'session-123',
         type: 'assistant',
         message: {
@@ -100,7 +107,7 @@ describe('formatMessage', () => {
 
     it('should format thinking content', () => {
       const message: SDKMessage = {
-        uuid: 'test-assistant-3',
+        uuid: createTestUUID('000000000003'),
         session_id: 'session-123',
         type: 'assistant',
         message: {
@@ -452,8 +459,9 @@ describe('formatMessage', () => {
           {
             tool_name: 'FileSystem',
             tool_use_id: 'tool_dangerous',
+            tool_input: {}
           }
-        ],
+        ] as any,
       };
 
       const result = formatMessage(message);
@@ -474,8 +482,8 @@ describe('formatMessage', () => {
         claude_code_version: '1.0.0',
         model: 'claude-3-sonnet',
         cwd: '/path/to/project',
-        permissionMode: 'read-write',
-        apiKeySource: 'environment',
+        permissionMode: 'read',
+        apiKeySource: 'env',
         tools: ['Read', 'Write', 'Bash'],
         mcp_servers: [
           {
@@ -499,7 +507,7 @@ describe('formatMessage', () => {
       expect(result).toContain('Version: 1.0.0');
       expect(result).toContain('Model: claude-3-sonnet');
       expect(result).toContain('Working Directory: /path/to/project');
-      expect(result).toContain('Permission Mode: read-write');
+      expect(result).toContain('Permission Mode: read');
       expect(result).toContain('Available Tools: 3');
       expect(result).toContain('✓ filesystem (connected)');
       expect(result).toContain('✗ database (failed)');
@@ -515,7 +523,7 @@ describe('formatMessage', () => {
         type: 'system',
         subtype: 'compact_boundary',
         compact_metadata: {
-          trigger: 'context_limit',
+          trigger: 'manual',
           pre_tokens: 150000,
         },
       };
@@ -523,7 +531,7 @@ describe('formatMessage', () => {
       const result = formatMessage(message);
 
       expect(result).toContain('◆ SYSTEM');
-      expect(result).toContain('⚡ Conversation Compacted (context_limit)');
+      expect(result).toContain('⚡ Conversation Compacted (manual)');
       expect(result).toContain('Previous tokens: 150,000');
     });
 
@@ -613,13 +621,13 @@ describe('formatMessage', () => {
   describe('Unknown Message Types', () => {
     it('should handle unknown message types gracefully', () => {
       const message = {
-        uuid: 'test-unknown-1',
+        uuid: createTestUUID('unknown1') as any,
         session_id: 'session-123',
         type: 'unknown_type' as any,
         message: {
           content: 'Unknown content'
         }
-      };
+      } as any;
 
       const result = formatMessage(message);
 
