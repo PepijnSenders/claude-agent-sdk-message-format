@@ -99,7 +99,7 @@ function formatToolParamValue(value: unknown): string {
  * @param showBox Whether to wrap the message in a box (default: true)
  * @returns Formatted string ready for CLI display
  */
-export function formatSDKMessage(message: SDKMessage, showBox = true): string {
+export function formatMessage(message: SDKMessage, showBox = true): string {
   let content: string;
   let header: string;
 
@@ -382,15 +382,3 @@ function formatStreamEvent(message: Extract<SDKMessage, { type: 'stream_event' }
   }
 }
 
-/**
- * Formats multiple SDK messages in sequence
- * @param messages Array of SDK messages
- * @param showBoxes Whether to wrap each message in a box (default: true)
- * @returns Formatted string with all messages
- */
-export function formatSDKMessages(messages: SDKMessage[], showBoxes = true): string {
-  return messages
-    .map(msg => formatSDKMessage(msg, showBoxes))
-    .filter(str => str.length > 0)
-    .join('\n');
-}

@@ -1,10 +1,10 @@
 /**
- * Basic usage example for @pepijnsenders/claude-agent-sdk-message-format
+ * Basic usage example for claude-pretty-printer
  *
  * Run: bun examples/basic.ts
  */
 
-import { formatSDKMessage } from '../src/index';
+import { formatMessage } from '../src/index';
 import type { SDKMessage } from '@anthropic-ai/claude-agent-sdk';
 
 // Example assistant message with tool use
@@ -103,14 +103,14 @@ const resultMessage: SDKMessage = {
 };
 
 console.log('='.repeat(80));
-console.log('CLAUDE AGENT SDK MESSAGE FORMATTER - EXAMPLE OUTPUT');
+console.log('CLAUDE PRETTY PRINTER - EXAMPLE OUTPUT');
 console.log('='.repeat(80));
 console.log();
 
-console.log(formatSDKMessage(assistantMessage));
+console.log(formatMessage(assistantMessage));
 console.log();
 
-console.log(formatSDKMessage(userMessage));
+console.log(formatMessage(userMessage));
 console.log();
 
-console.log(formatSDKMessage(resultMessage));
+console.log(formatMessage(resultMessage));

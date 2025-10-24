@@ -1,9 +1,9 @@
-# @pepijnsenders/claude-agent-sdk-message-format
+# claude-pretty-printer
 
 Beautiful CLI formatting for Claude Agent SDK messages with colors and boxes.
 
-![npm version](https://img.shields.io/npm/v/@pepijnsenders/claude-agent-sdk-message-format)
-![license](https://img.shields.io/npm/l/@pepijnsenders/claude-agent-sdk-message-format)
+![npm version](https://img.shields.io/npm/v/claude-pretty-printer)
+![license](https://img.shields.io/npm/l/claude-pretty-printer)
 
 ## Features
 
@@ -16,30 +16,30 @@ Beautiful CLI formatting for Claude Agent SDK messages with colors and boxes.
 ## Installation
 
 ```bash
-npm install @pepijnsenders/claude-agent-sdk-message-format
+npm install claude-pretty-printer
 ```
 
 ```bash
-bun add @pepijnsenders/claude-agent-sdk-message-format
+bun add claude-pretty-printer
 ```
 
 ## Usage
 
 ```typescript
-import { formatSDKMessage, formatSDKMessages } from '@pepijnsenders/claude-agent-sdk-message-format';
+import { formatMessage } from 'claude-pretty-printer';
 import { query } from '@anthropic-ai/claude-agent-sdk';
 
 // Format a single message
 for await (const message of query({ prompt: 'Hello!' })) {
-  console.log(formatSDKMessage(message));
+  console.log(formatMessage(message));
 }
 
-// Collect and format multiple messages
+// Format multiple messages
 const messages = [];
 for await (const message of query({ prompt: 'Hello!' })) {
   messages.push(message);
 }
-console.log(formatSDKMessages(messages));
+messages.forEach(message => console.log(formatMessage(message)));
 ```
 
 ## Message Types
@@ -74,25 +74,23 @@ Stream events are formatted inline without boxes for real-time output.
 
 ## API
 
-### `formatSDKMessage(message, showBox?)`
+### `formatMessage(message, showBox?)`
 
-Formats a single SDK message.
+Formats a single SDK message for beautiful CLI output.
 
 **Parameters:**
 - `message: SDKMessage` - The message to format
 - `showBox?: boolean` - Whether to wrap in a box (default: `true`)
 
-**Returns:** `string` - Formatted message
+**Returns:** `string` - Formatted message ready for console output
 
-### `formatSDKMessages(messages, showBoxes?)`
-
-Formats multiple SDK messages in sequence.
-
-**Parameters:**
-- `messages: SDKMessage[]` - Array of messages to format
-- `showBoxes?: boolean` - Whether to wrap each message in a box (default: `true`)
-
-**Returns:** `string` - Formatted messages joined with newlines
+**Example - Processing multiple messages:**
+```typescript
+const messages = await getMessages();
+messages.forEach(message => {
+  console.log(formatMessage(message));
+});
+```
 
 ## Color Scheme
 
