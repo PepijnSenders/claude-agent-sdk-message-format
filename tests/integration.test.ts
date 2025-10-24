@@ -1,0 +1,169 @@
+import { describe, it, expect } from 'bun:test';
+import { formatMessage } from '../src/index';
+
+describe('Integration Tests', () => {
+  it('should work with a typical conversation flow', () => {
+    // Simulate a typical conversation with user message, assistant tool use, and tool result
+
+    const userMessage = {
+      uuid: 'user-1',
+      session_id: 'session-123',
+      type: 'user' as const,
+      message: {
+        role: 'user' as const,
+        content: 'Please read the package.json file for me'
+      },
+      parent_tool_use_id: null,
+    };
+
+    const assistantMessage = {
+      uuid: 'assistant-1',
+      session_id: 'session-123',
+      type: 'assistant' as const,
+      message: {
+        id: 'msg_1',
+        type: 'message' as const,
+        role: 'assistant' as const,
+        model: 'claude-3-sonnet',
+        content: [
+          {
+            type: 'text' as const,
+            text: 'I\'ll read the package.json file for you.'
+          },
+          {
+            type: 'tool_use' as const,
+            id: 'tool_1',
+            name: 'Read',
+            input: {
+              file_path: './package.json'
+            }
+          }
+        ],
+        stop_reason: 'tool_use' as const,
+        stop_sequence: null,
+        usage: {
+          input_tokens: 150,
+          output_tokens: 75,
+        },
+      } as any,
+      parent_tool_use_id: null,
+    };
+
+    const toolResultMessage = {
+      uuid: 'user-2',
+      session_id: 'session-123',
+      type: 'user' as const,
+      message: {
+        role: 'user' as const,
+        content: [
+          {
+            type: 'tool_result' as const,
+            tool_use_id: 'tool_1',
+            content: JSON.stringify({
+              name: 'test-package',
+              version: '1.0.0',
+              scripts: {
+                test: 'bun test',
+                build: 'bun run build'
+              }
+            }, null, 2),
+            is_error: false
+          }
+        ]
+      },
+      parent_tool_use_id: null,
+    };
+
+    const userResult = formatMessage(userMessage);
+    const assistantResult = formatMessage(assistantMessage);
+    const toolResultResult = formatMessage(toolResultMessage);
+
+    // Verify user message
+    expect(userResult).toContain('◆ USER');
+    expect(userResult).toContain('Please read the package.json file for me');
+    expect(userResult).not.toContain('(Tool Results)');
+
+    // Verify assistant message
+    expect(assistantResult).toContain('◆ ASSISTANT');
+    expect(assistantResult).toContain('I\'ll read the package.json file for you');
+    expect(assistantResult).toContain('→ Read');
+    expect(assistantResult).toContain('file_path: "./package.json"');
+
+    // Verify tool result message
+    expect(toolResultResult).toContain('◆ USER (Tool Results)');
+    expect(toolResultResult).toContain('✓ Tool result: tool_1');
+    expect(toolResultResult).toContain('test-package');
+    expect(toolResultResult).toContain('1.0.0');
+  });
+
+  it('should handle multiple tool results in one message', () => {
+    const multiToolMessage = {
+      uuid: 'user-multi',
+      session_id: 'session-123',
+      type: 'user' as const,
+      message: {
+        role: 'user' as const,
+        content: [
+          {
+            type: 'tool_result' as const,
+            tool_use_id: 'tool_1',
+            content: 'First tool completed successfully',
+            is_error: false
+          },
+          {
+            type: 'tool_result' as const,
+            tool_use_id: 'tool_2',
+            content: 'Second tool failed',
+            is_error: true
+          }
+        ]
+      },
+      parent_tool_use_id: null,
+    };
+
+    const result = formatMessage(multiToolMessage);
+
+    expect(result).toContain('◆ USER (Tool Results)');
+    expect(result).toContain('✓ Tool result: tool_1');
+    expect(result).toContain('✗ Tool result: tool_2');
+    expect(result).toContain('First tool completed successfully');
+    expect(result).toContain('Second tool failed');
+    expect(result).toContain('✗ Error in tool execution');
+  });
+
+  it('should handle processing multiple messages in sequence', () => {
+    const messages = [
+      {
+        uuid: 'msg-1',
+        session_id: 'session-123',
+        type: 'user' as const,
+        message: { role: 'user' as const, content: 'Hello!' },
+        parent_tool_use_id: null,
+      },
+      {
+        uuid: 'msg-2',
+        session_id: 'session-123',
+        type: 'assistant' as const,
+        message: {
+          id: 'msg_2',
+          type: 'message' as const,
+          role: 'assistant' as const,
+          model: 'claude-3-sonnet',
+          content: [{ type: 'text' as const, text: 'Hi there! How can I help you?' }],
+          stop_reason: 'end_turn' as const,
+          stop_sequence: null,
+          usage: { input_tokens: 50, output_tokens: 25 },
+        } as any,
+        parent_tool_use_id: null,
+      }
+    ];
+
+    const results = messages.map(msg => formatMessage(msg));
+
+    expect(results).toHaveLength(2);
+    expect(results[0]).toContain('◆ USER');
+    expect(results[0]).toContain('Hello!');
+    expect(results[1]).toContain('◆ ASSISTANT');
+    expect(results[1]).toContain('Hi there! How can I help you?');
+  });
+});

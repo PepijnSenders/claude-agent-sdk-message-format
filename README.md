@@ -154,6 +154,18 @@ bun run build
 bun test
 ```
 
+## Testing
+
+This package includes comprehensive unit tests that cover:
+
+- ✅ All message types (assistant, user, result, system, stream events)
+- ✅ Tool result detection and special headers
+- ✅ Edge cases and error handling
+- ✅ Integration scenarios
+- ✅ Various content formats and parameter types
+
+Run the test suite with `bun test` to verify everything works correctly.
+
 ## License
 
 MIT © Pepijn Senders

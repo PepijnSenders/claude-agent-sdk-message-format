@@ -109,8 +109,9 @@ export function formatMessage(message: SDKMessage, showBox = true): string {
       content = formatAssistantMessage(message);
       break;
     case 'user':
-      header = pc.green('◆ USER');
-      content = formatUserMessage(message);
+      const userResult = formatUserMessage(message);
+      header = userResult.header;
+      content = userResult.content;
       break;
     case 'result':
       header = pc.magenta('◆ RESULT');
@@ -176,13 +177,14 @@ function formatAssistantMessage(message: Extract<SDKMessage, { type: 'assistant'
   return lines.join('\n');
 }
 
-function formatUserMessage(message: Extract<SDKMessage, { type: 'user' }>): string {
+function formatUserMessage(message: Extract<SDKMessage, { type: 'user' }>): { header: string; content: string } {
   if ('isReplay' in message && message.isReplay) {
-    return ''; // Skip replay messages to avoid duplication
+    return { header: '', content: '' }; // Skip replay messages to avoid duplication
   }
 
   const content = message.message.content;
   const lines: string[] = [];
+  let hasToolResults = false;
 
   if (typeof content === 'string') {
     lines.push(content);
@@ -195,6 +197,7 @@ function formatUserMessage(message: Extract<SDKMessage, { type: 'user' }>): stri
       } else if (block.type === 'image') {
         lines.push(pc.dim('[Image]'));
       } else if (block.type === 'tool_result') {
+        hasToolResults = true;
         const resultIcon = block.is_error ? pc.red('✗') : pc.green('✓');
         lines.push(`\n${resultIcon} ${pc.dim(`Tool result: ${block.tool_use_id}`)}`);
         if (typeof block.content === 'string') {
@@ -215,11 +218,14 @@ function formatUserMessage(message: Extract<SDKMessage, { type: 'user' }>): stri
     }
   }
 
-  if (message.isSynthetic) {
-    return `${pc.dim('[Synthetic]')} ${lines.join('\n')}`;
-  }
+  const contentText = message.isSynthetic
+    ? `${pc.dim('[Synthetic]')} ${lines.join('\n')}`
+    : lines.join('\n');
 
-  return lines.join('\n');
+  // Choose header based on whether there are tool results
+  const header = hasToolResults ? pc.green('◆ USER (Tool Results)') : pc.green('◆ USER');
+
+  return { header, content: contentText };
 }
 
 function formatResultMessage(message: Extract<SDKMessage, { type: 'result' }>): string {
