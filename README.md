@@ -60,6 +60,8 @@ bun add claude-pretty-printer
 
 ## Usage
 
+### Programmatic API
+
 Perfect for debugging, monitoring, or building CLI tools that work with the Claude Agent SDK:
 
 ```typescript
@@ -75,6 +77,26 @@ for await (const message of query({ prompt: 'Read package.json' })) {
 const messages = await getAgentMessages();
 messages.forEach(message => console.log(formatMessage(message)));
 ```
+
+### Command Line Interface
+
+Transform JSON output directly from Claude CLI or any other source:
+
+```bash
+# Format messages from Claude CLI
+claude -p --output-format json --dangerously-skip-permissions "test" | npx claude-pretty-printer
+
+# Format from a JSON file
+cat messages.json | npx claude-pretty-printer
+
+# Format single message
+echo '{"type":"assistant","message":{"content":"Hello"}}' | npx claude-pretty-printer
+
+# Show help
+npx claude-pretty-printer --help
+```
+
+**CLI Input Format**: Each line should be a complete JSON object representing an SDK message. The CLI processes JSON line by line from stdin.
 
 ## What It Formats
 

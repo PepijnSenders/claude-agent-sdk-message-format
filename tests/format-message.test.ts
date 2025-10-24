@@ -501,7 +501,7 @@ describe('formatMessage', () => {
       expect(result).toContain('Version: 1.0.0');
       expect(result).toContain('Model: claude-3-sonnet');
       expect(result).toContain('Working Directory: /path/to/project');
-      expect(result).toContain('Permission Mode: read');
+      expect(result).toContain('Permission Mode: default');
       expect(result).toContain('Available Tools: 3');
       expect(result).toContain('✓ filesystem (connected)');
       expect(result).toContain('✗ database (failed)');
