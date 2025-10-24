@@ -1,13 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach } from 'bun:test';
 import { formatMessage } from '../src/index';
 import type { SDKMessage } from '@anthropic-ai/claude-agent-sdk';
-
-// Helper function to generate proper UUID v4 format
-function createTestUUID(seed: number): string {
-  // Generate a consistent UUID based on the seed number
-  const hex = (seed + 0x550e8400e29b41d4).toString(16).padStart(16, '0');
-  return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}466655440000`;
-}
+import { v4 as uuidv4 } from 'uuid';
 
 describe('formatMessage', () => {
   // Mock process.stdout.columns for consistent testing
@@ -32,7 +26,7 @@ describe('formatMessage', () => {
   describe('Assistant Messages', () => {
     it('should format text content', () => {
       const message: SDKMessage = {
-        uuid: createTestUUID(1),
+        uuid: uuidv4() as `${string}-${string}-${string}-${string}-${string}`,
         session_id: 'session-123',
         type: 'assistant',
         message: {
@@ -65,7 +59,7 @@ describe('formatMessage', () => {
 
     it('should format tool use blocks', () => {
       const message: SDKMessage = {
-        uuid: createTestUUID(2),
+        uuid: uuidv4() as `${string}-${string}-${string}-${string}-${string}`,
         session_id: 'session-123',
         type: 'assistant',
         message: {
@@ -107,7 +101,7 @@ describe('formatMessage', () => {
 
     it('should format thinking content', () => {
       const message: SDKMessage = {
-        uuid: createTestUUID('000000000003'),
+        uuid: uuidv4() as `${string}-${string}-${string}-${string}-${string}`,
         session_id: 'session-123',
         type: 'assistant',
         message: {
@@ -147,7 +141,7 @@ describe('formatMessage', () => {
 
     it('should format complex tool parameters', () => {
       const message: SDKMessage = {
-        uuid: 'test-assistant-4',
+        uuid: uuidv4() as `${string}-${string}-${string}-${string}-${string}`,
         session_id: 'session-123',
         type: 'assistant',
         message: {
@@ -190,7 +184,7 @@ describe('formatMessage', () => {
     it('should truncate very long strings in tool parameters', () => {
       const longString = 'x'.repeat(150);
       const message: SDKMessage = {
-        uuid: 'test-assistant-5',
+        uuid: uuidv4() as `${string}-${string}-${string}-${string}-${string}`,
         session_id: 'session-123',
         type: 'assistant',
         message: {
@@ -228,7 +222,7 @@ describe('formatMessage', () => {
   describe('User Messages', () => {
     it('should format simple text messages', () => {
       const message: SDKMessage = {
-        uuid: 'test-user-1',
+        uuid: uuidv4() as `${string}-${string}-${string}-${string}-${string}`,
         session_id: 'session-123',
         type: 'user',
         message: {
@@ -247,7 +241,7 @@ describe('formatMessage', () => {
 
     it('should format messages with tool results with special header', () => {
       const message: SDKMessage = {
-        uuid: 'test-user-2',
+        uuid: uuidv4() as `${string}-${string}-${string}-${string}-${string}`,
         session_id: 'session-123',
         type: 'user',
         message: {
@@ -273,7 +267,7 @@ describe('formatMessage', () => {
 
     it('should format tool results with errors', () => {
       const message: SDKMessage = {
-        uuid: 'test-user-3',
+        uuid: uuidv4() as `${string}-${string}-${string}-${string}-${string}`,
         session_id: 'session-123',
         type: 'user',
         message: {
@@ -300,7 +294,7 @@ describe('formatMessage', () => {
 
     it('should format mixed content with text and tool results', () => {
       const message: SDKMessage = {
-        uuid: 'test-user-4',
+        uuid: uuidv4() as `${string}-${string}-${string}-${string}-${string}`,
         session_id: 'session-123',
         type: 'user',
         message: {
@@ -327,7 +321,7 @@ describe('formatMessage', () => {
 
     it('should format synthetic user messages', () => {
       const message: SDKMessage = {
-        uuid: 'test-user-5',
+        uuid: uuidv4() as `${string}-${string}-${string}-${string}-${string}`,
         session_id: 'session-123',
         type: 'user',
         message: {
@@ -346,7 +340,7 @@ describe('formatMessage', () => {
 
     it('should skip replay messages', () => {
       const message: SDKMessage = {
-        uuid: 'test-user-6',
+        uuid: uuidv4() as `${string}-${string}-${string}-${string}-${string}`,
         session_id: 'session-123',
         type: 'user',
         message: {
@@ -366,7 +360,7 @@ describe('formatMessage', () => {
   describe('Result Messages', () => {
     it('should format success results', () => {
       const message: SDKMessage = {
-        uuid: 'test-result-1',
+        uuid: uuidv4() as `${string}-${string}-${string}-${string}-${string}`,
         session_id: 'session-123',
         type: 'result',
         subtype: 'success',
@@ -412,7 +406,7 @@ describe('formatMessage', () => {
 
     it('should format error results', () => {
       const message: SDKMessage = {
-        uuid: 'test-result-2',
+        uuid: uuidv4() as `${string}-${string}-${string}-${string}-${string}`,
         session_id: 'session-123',
         type: 'result',
         subtype: 'error_max_turns',
@@ -440,7 +434,7 @@ describe('formatMessage', () => {
 
     it('should format permission denials', () => {
       const message: SDKMessage = {
-        uuid: 'test-result-3',
+        uuid: uuidv4() as `${string}-${string}-${string}-${string}-${string}`,
         session_id: 'session-123',
         type: 'result',
         subtype: 'success',
@@ -475,7 +469,7 @@ describe('formatMessage', () => {
   describe('System Messages', () => {
     it('should format init messages', () => {
       const message: SDKMessage = {
-        uuid: 'test-system-1',
+        uuid: uuidv4() as `${string}-${string}-${string}-${string}-${string}`,
         session_id: 'session-123',
         type: 'system',
         subtype: 'init',
@@ -518,7 +512,7 @@ describe('formatMessage', () => {
 
     it('should format compact boundary messages', () => {
       const message: SDKMessage = {
-        uuid: 'test-system-2',
+        uuid: uuidv4() as `${string}-${string}-${string}-${string}-${string}`,
         session_id: 'session-123',
         type: 'system',
         subtype: 'compact_boundary',
@@ -537,7 +531,7 @@ describe('formatMessage', () => {
 
     it('should format hook responses', () => {
       const message: SDKMessage = {
-        uuid: 'test-system-3',
+        uuid: uuidv4() as `${string}-${string}-${string}-${string}-${string}`,
         session_id: 'session-123',
         type: 'system',
         subtype: 'hook_response',
@@ -563,7 +557,7 @@ describe('formatMessage', () => {
   describe('Stream Events', () => {
     it('should format text delta events', () => {
       const message: SDKMessage = {
-        uuid: 'test-stream-1',
+        uuid: uuidv4() as `${string}-${string}-${string}-${string}-${string}`,
         session_id: 'session-123',
         type: 'stream_event',
         event: {
@@ -572,7 +566,8 @@ describe('formatMessage', () => {
             type: 'text_delta',
             text: 'Hello'
           }
-        }
+        },
+        parent_tool_use_id: null,
       };
 
       const result = formatMessage(message);
@@ -584,7 +579,7 @@ describe('formatMessage', () => {
 
     it('should format tool use start events', () => {
       const message: SDKMessage = {
-        uuid: 'test-stream-2',
+        uuid: uuidv4() as `${string}-${string}-${string}-${string}-${string}`,
         session_id: 'session-123',
         type: 'stream_event',
         event: {
@@ -594,7 +589,8 @@ describe('formatMessage', () => {
             id: 'tool_1',
             name: 'Read'
           }
-        }
+        },
+        parent_tool_use_id: null,
       };
 
       const result = formatMessage(message);
@@ -604,12 +600,13 @@ describe('formatMessage', () => {
 
     it('should return empty string for events that should be silent', () => {
       const message: SDKMessage = {
-        uuid: 'test-stream-3',
+        uuid: uuidv4() as `${string}-${string}-${string}-${string}-${string}`,
         session_id: 'session-123',
         type: 'stream_event',
         event: {
           type: 'message_start'
-        }
+        },
+        parent_tool_use_id: null,
       };
 
       const result = formatMessage(message);
@@ -621,7 +618,7 @@ describe('formatMessage', () => {
   describe('Unknown Message Types', () => {
     it('should handle unknown message types gracefully', () => {
       const message = {
-        uuid: createTestUUID('unknown1') as any,
+        uuid: uuidv4() as `${string}-${string}-${string}-${string}-${string}`,
         session_id: 'session-123',
         type: 'unknown_type' as any,
         message: {
@@ -639,7 +636,7 @@ describe('formatMessage', () => {
   describe('Box Options', () => {
     it('should format without box when showBox is false', () => {
       const message: SDKMessage = {
-        uuid: 'test-box-1',
+        uuid: uuidv4() as `${string}-${string}-${string}-${string}-${string}`,
         session_id: 'session-123',
         type: 'user',
         message: {
@@ -658,7 +655,7 @@ describe('formatMessage', () => {
 
     it('should format with box when showBox is true (default)', () => {
       const message: SDKMessage = {
-        uuid: 'test-box-2',
+        uuid: uuidv4() as `${string}-${string}-${string}-${string}-${string}`,
         session_id: 'session-123',
         type: 'user',
         message: {
@@ -679,7 +676,7 @@ describe('formatMessage', () => {
   describe('Edge Cases', () => {
     it('should handle empty content gracefully', () => {
       const message: SDKMessage = {
-        uuid: 'test-empty-1',
+        uuid: uuidv4() as `${string}-${string}-${string}-${string}-${string}`,
         session_id: 'session-123',
         type: 'user',
         message: {
@@ -697,7 +694,7 @@ describe('formatMessage', () => {
 
     it('should handle null/undefined tool parameters', () => {
       const message: SDKMessage = {
-        uuid: 'test-edge-1',
+        uuid: uuidv4() as `${string}-${string}-${string}-${string}-${string}`,
         session_id: 'session-123',
         type: 'assistant',
         message: {

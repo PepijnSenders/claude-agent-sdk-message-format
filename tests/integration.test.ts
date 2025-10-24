@@ -1,12 +1,13 @@
 import { describe, it, expect } from 'bun:test';
 import { formatMessage } from '../src/index';
+import { v4 as uuidv4 } from 'uuid';
 
 describe('Integration Tests', () => {
   it('should work with a typical conversation flow', () => {
     // Simulate a typical conversation with user message, assistant tool use, and tool result
 
     const userMessage = {
-      uuid: 'user-1',
+      uuid: uuidv4(),
       session_id: 'session-123',
       type: 'user' as const,
       message: {
@@ -17,7 +18,7 @@ describe('Integration Tests', () => {
     };
 
     const assistantMessage = {
-      uuid: 'assistant-1',
+      uuid: uuidv4(),
       session_id: 'session-123',
       type: 'assistant' as const,
       message: {
@@ -50,7 +51,7 @@ describe('Integration Tests', () => {
     };
 
     const toolResultMessage = {
-      uuid: 'user-2',
+      uuid: uuidv4(),
       session_id: 'session-123',
       type: 'user' as const,
       message: {
@@ -98,7 +99,7 @@ describe('Integration Tests', () => {
 
   it('should handle multiple tool results in one message', () => {
     const multiToolMessage = {
-      uuid: 'user-multi',
+      uuid: uuidv4(),
       session_id: 'session-123',
       type: 'user' as const,
       message: {
