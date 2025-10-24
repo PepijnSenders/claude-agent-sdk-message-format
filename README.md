@@ -1,19 +1,52 @@
 # claude-pretty-printer
 
-Beautiful CLI formatting for Claude Agent SDK messages with colors and boxes.
+Transform raw Claude Agent SDK messages into beautiful, readable CLI output.
 
 <img width="888" height="335" alt="Screenshot 2025-10-24 at 23 46 21" src="https://github.com/user-attachments/assets/34649b1c-c530-4ede-b2d6-33df8e8f04c5" />
 
 ![npm version](https://img.shields.io/npm/v/claude-pretty-printer)
 ![license](https://img.shields.io/npm/l/claude-pretty-printer)
 
+## The Problem
+
+The [Claude Agent SDK](https://github.com/anthropics/claude-agent-sdk) outputs raw JSON messages that are difficult to read and debug:
+
+```json
+{
+  "uuid": "550e8400-e29b-41d4-a716-446655440000",
+  "type": "assistant",
+  "message": {
+    "id": "msg_123",
+    "role": "assistant",
+    "content": [
+      {"type": "text", "text": "Let me read that file for you."},
+      {"type": "tool_use", "id": "tool_456", "name": "Read", "input": {"file_path": "/path/to/file.txt"}}
+    ]
+  }
+}
+```
+
+## The Solution
+
+`claude-pretty-printer` transforms these raw messages into clean, readable output:
+
+```
+────────────────────────────────────────────────────────────
+◆ ASSISTANT
+Let me read that file for you.
+
+→ Read
+  file_path: "/path/to/file.txt"
+────────────────────────────────────────────────────────────
+```
+
 ## Features
 
-- 🎨 **Beautiful Colors** - Syntax highlighting with picocolors
-- 📦 **Terminal Boxes** - Full-width boxes that adapt to your terminal
-- 🔍 **Smart Formatting** - Intelligent formatting for all message types
-- 🚀 **Type-Safe** - Full TypeScript support
-- 💡 **Lightweight** - Minimal dependencies
+- 🎨 **Syntax Highlighting** - Clear colors and formatting for different message types
+- 📦 **Terminal Boxes** - Full-width boxes that adapt to your terminal size
+- 🔍 **Smart Detection** - Automatically formats all message types from the SDK
+- 🚀 **Type-Safe** - Full TypeScript support with proper types
+- 💡 **Developer-Focused** - Built for debugging and monitoring Claude Agent interactions
 
 ## Installation
 
@@ -27,22 +60,25 @@ bun add claude-pretty-printer
 
 ## Usage
 
+Perfect for debugging, monitoring, or building CLI tools that work with the Claude Agent SDK:
+
 ```typescript
 import { formatMessage } from 'claude-pretty-printer';
 import { query } from '@anthropic-ai/claude-agent-sdk';
 
-// Format a single message
-for await (const message of query({ prompt: 'Hello!' })) {
+// Real-time message formatting during agent execution
+for await (const message of query({ prompt: 'Read package.json' })) {
   console.log(formatMessage(message));
 }
 
-// Format multiple messages
-const messages = [];
-for await (const message of query({ prompt: 'Hello!' })) {
-  messages.push(message);
-}
+// Batch processing of collected messages
+const messages = await getAgentMessages();
 messages.forEach(message => console.log(formatMessage(message)));
 ```
+
+## What It Formats
+
+`claude-pretty-printer` handles all message types from the [Claude Agent SDK](https://github.com/anthropics/claude-agent-sdk):
 
 ## Message Types
 
@@ -144,27 +180,14 @@ Token Usage:
 ## Development
 
 ```bash
-# Install dependencies
-bun install
-
-# Build
-bun run build
-
-# Run tests
-bun test
+bun install     # Install dependencies
+bun run build  # Build the package
+bun test        # Run comprehensive test suite
 ```
 
 ## Testing
 
-This package includes comprehensive unit tests that cover:
-
-- ✅ All message types (assistant, user, result, system, stream events)
-- ✅ Tool result detection and special headers
-- ✅ Edge cases and error handling
-- ✅ Integration scenarios
-- ✅ Various content formats and parameter types
-
-Run the test suite with `bun test` to verify everything works correctly.
+Comprehensive test suite covering all SDK message types, edge cases, and integration scenarios. Run with `bun test`.
 
 ## License
 
