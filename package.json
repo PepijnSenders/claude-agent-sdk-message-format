@@ -1,0 +1,57 @@
+{
+  "name": "@pepijnsenders/claude-agent-sdk-message-format",
+  "version": "0.1.0",
+  "description": "Beautiful CLI formatting for Claude Agent SDK messages with colors and boxes",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
+    "test": "bun test",
+    "prepublishOnly": "bun run build"
+  },
+  "keywords": [
+    "claude",
+    "anthropic",
+    "sdk",
+    "cli",
+    "formatting",
+    "colors",
+    "terminal",
+    "message-format"
+  ],
+  "author": "Pepijn Senders",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PepijnSenders/claude-agent-sdk-message-format.git"
+  },
+  "bugs": {
+    "url": "https://github.com/PepijnSenders/claude-agent-sdk-message-format/issues"
+  },
+  "homepage": "https://github.com/PepijnSenders/claude-agent-sdk-message-format#readme",
+  "peerDependencies": {
+    "@anthropic-ai/claude-agent-sdk": ">=0.1.0"
+  },
+  "dependencies": {
+    "picocolors": "^1.1.1"
+  },
+  "devDependencies": {
+    "@anthropic-ai/claude-agent-sdk": "^0.1.26",
+    "@types/bun": "latest",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.3"
+  }
+}
