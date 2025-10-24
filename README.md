@@ -2,6 +2,8 @@
 
 Beautiful CLI formatting for Claude Agent SDK messages with colors and boxes.
 
+<img width="888" height="335" alt="Screenshot 2025-10-24 at 23 46 21" src="https://github.com/user-attachments/assets/34649b1c-c530-4ede-b2d6-33df8e8f04c5" />
+
 ![npm version](https://img.shields.io/npm/v/claude-pretty-printer)
 ![license](https://img.shields.io/npm/l/claude-pretty-printer)
 
