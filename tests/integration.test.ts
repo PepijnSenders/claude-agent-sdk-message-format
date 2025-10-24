@@ -7,7 +7,7 @@ describe('Integration Tests', () => {
     // Simulate a typical conversation with user message, assistant tool use, and tool result
 
     const userMessage = {
-      uuid: uuidv4(),
+      uuid: uuidv4() as `${string}-${string}-${string}-${string}-${string}`,
       session_id: 'session-123',
       type: 'user' as const,
       message: {
@@ -18,7 +18,7 @@ describe('Integration Tests', () => {
     };
 
     const assistantMessage = {
-      uuid: uuidv4(),
+      uuid: uuidv4() as `${string}-${string}-${string}-${string}-${string}`,
       session_id: 'session-123',
       type: 'assistant' as const,
       message: {
@@ -51,7 +51,7 @@ describe('Integration Tests', () => {
     };
 
     const toolResultMessage = {
-      uuid: uuidv4(),
+      uuid: uuidv4() as `${string}-${string}-${string}-${string}-${string}`,
       session_id: 'session-123',
       type: 'user' as const,
       message: {
@@ -99,7 +99,7 @@ describe('Integration Tests', () => {
 
   it('should handle multiple tool results in one message', () => {
     const multiToolMessage = {
-      uuid: uuidv4(),
+      uuid: uuidv4() as `${string}-${string}-${string}-${string}-${string}`,
       session_id: 'session-123',
       type: 'user' as const,
       message: {
@@ -135,14 +135,14 @@ describe('Integration Tests', () => {
   it('should handle processing multiple messages in sequence', () => {
     const messages = [
       {
-        uuid: 'msg-1',
+        uuid: uuidv4() as `${string}-${string}-${string}-${string}-${string}`,
         session_id: 'session-123',
         type: 'user' as const,
         message: { role: 'user' as const, content: 'Hello!' },
         parent_tool_use_id: null,
       },
       {
-        uuid: 'msg-2',
+        uuid: uuidv4() as `${string}-${string}-${string}-${string}-${string}`,
         session_id: 'session-123',
         type: 'assistant' as const,
         message: {

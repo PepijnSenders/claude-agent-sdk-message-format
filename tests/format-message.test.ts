@@ -414,7 +414,6 @@ describe('formatMessage', () => {
         duration_api_ms: 8000,
         is_error: true,
         num_turns: 50,
-        result: '',
         total_cost_usd: 0.1234,
         usage: {
           input_tokens: 25000,
@@ -476,8 +475,8 @@ describe('formatMessage', () => {
         claude_code_version: '1.0.0',
         model: 'claude-3-sonnet',
         cwd: '/path/to/project',
-        permissionMode: 'read',
-        apiKeySource: 'env',
+        permissionMode: 'default',
+        apiKeySource: 'temporary',
         tools: ['Read', 'Write', 'Bash'],
         mcp_servers: [
           {
@@ -492,6 +491,7 @@ describe('formatMessage', () => {
         slash_commands: ['help', 'clear'],
         agents: ['code-analyzer'],
         skills: ['javascript', 'typescript'],
+        output_style: 'verbose',
       };
 
       const result = formatMessage(message);
