@@ -1,0 +1,1 @@
+{"type":"result","subtype":"success","duration_ms":500,"duration_api_ms":400,"num_turns":1,"result":"Task completed successfully","session_id":"test-123","total_cost_usd":0.005,"usage":{"input_tokens":100,"output_tokens":50},"modelUsage":{},"permission_denials":[],"uuid":"550e8400-e29b-41d4-a716-446655440000"}
