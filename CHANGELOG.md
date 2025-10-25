@@ -1,5 +1,509 @@
 # claude-pretty-printer
 
+## 1.257.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.256.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.255.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.254.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.253.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.252.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.251.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.250.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.249.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.248.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.247.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.246.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.245.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.244.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.243.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.242.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.241.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.240.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.239.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.238.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.237.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.236.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.235.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.234.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.233.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.232.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.231.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.230.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.229.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.228.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.227.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.226.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.225.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.224.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.223.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.222.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.221.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.220.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.219.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.218.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.217.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.216.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.215.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.214.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.213.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.212.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.211.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.210.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.209.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.208.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.207.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.206.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.205.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.204.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.203.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.202.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.201.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.200.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.199.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.198.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.197.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.196.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.195.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.194.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.193.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.192.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.191.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.190.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.189.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.188.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.187.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.186.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.185.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.184.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.183.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.182.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.181.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.180.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.179.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.178.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.177.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.176.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.175.0
+
+### Minor Changes
+
+- Update and improve functionality
+
+## 1.174.0
+
+### Minor Changes
+
+- Update and improve functionality
+
 ## 1.173.0
 
 ### Minor Changes
@@ -1037,3 +1541,40 @@
 ### Minor Changes
 
 - Update and improve functionality
+
+## 1.0.3
+
+### Patch Changes
+
+- Add field validation for different message types with helpful error messages
+- Improve CLI error handling for incomplete JSON objects
+- Fix inline JSON parsing with detailed validation feedback
+
+## 1.0.2
+
+### Patch Changes
+
+- Add comprehensive unit test suite with 28 tests covering all message types
+- Add UUID package for proper test data generation
+- Fix TypeScript errors in test files
+- Improve type safety and error handling
+
+## 1.0.1
+
+### Patch Changes
+
+- Simplify API from two functions to single `formatMessage`
+- Add smart tool result detection in user messages
+- Update README with problem/solution focused messaging
+- Improve code organization and documentation
+
+## 1.0.0
+
+### Major Changes
+
+- Initial release of claude-pretty-printer
+- Transform raw Claude Agent SDK messages into beautiful CLI output
+- Support for all message types: assistant, user, result, system, stream_event
+- CLI with stdin, file, and inline JSON input methods
+- Color-coded terminal boxes with full-width formatting
+- TypeScript support with proper type definitions
