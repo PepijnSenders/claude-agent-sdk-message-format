@@ -4,6 +4,7 @@ import { formatMessage } from './index';
 import { createInterface } from 'readline';
 import { readFileSync } from 'fs';
 import { existsSync } from 'fs';
+import pc from 'picocolors';
 
 /**
  * CLI interface for claude-pretty-printer
@@ -109,51 +110,53 @@ async function main() {
 
 // Handle help flag
 if (process.argv.includes('--help') || process.argv.includes('-h')) {
-  console.log(`
-claude-pretty-printer - Format Claude Agent SDK messages
+  console.log('');
+  const box = pc.bold(pc.cyan('┌─────────────────────────────────────────────────────────────┐'));
+  const title = pc.bold(pc.cyan('│')) + pc.bold('                    ') + pc.bold(pc.magenta('claude-pretty-printer')) + pc.bold('                     ') + pc.bold(pc.cyan('│'));
+  const line1 = pc.bold(pc.cyan('│')) + '  ' + pc.dim('Transform raw Claude Agent SDK messages into') + '        ' + pc.bold(pc.cyan('│'));
+  const line2 = pc.bold(pc.cyan('│')) + '  ' + pc.dim('beautiful, readable CLI output') + '                     ' + pc.bold(pc.cyan('│'));
+  const bottom = pc.bold(pc.cyan('└─────────────────────────────────────────────────────────────┘'));
 
-USAGE:
-  # Read from stdin (pipe from Claude CLI)
-  claude -p --output-format json | npx claude-pretty-printer
+  console.log(box);
+  console.log(title);
+  console.log(line1);
+  console.log(line2);
+  console.log(bottom);
+  console.log('');
 
-  # Read from file (multi-line JSON)
-  npx claude-pretty-printer messages.txt
+  console.log(pc.bold(pc.green('▶ USAGE EXAMPLES:')));
+  console.log('');
+  console.log(pc.cyan('  📺  Pipe from Claude CLI'));
+  console.log(pc.dim('      claude -p --output-format json "test" | npx claude-pretty-printer'));
+  console.log('');
+  console.log(pc.cyan('  📁  Read from file'));
+  console.log(pc.dim('      npx claude-pretty-printer messages.json'));
+  console.log('');
+  console.log(pc.cyan('  💬  Inline JSON'));
+  console.log(pc.dim('      npx claude-pretty-printer \'{"type":"result","subtype":"success","result":"Done"}\''));
+  console.log('');
 
-  # Inline JSON (single message)
-  npx claude-pretty-printer '{"type":"assistant","message":{"content":"Hello"}}'
+  console.log(pc.bold(pc.yellow('▶ INPUT METHODS:')));
+  console.log('');
+  console.log(pc.dim('  • stdin  ') + pc.white('- Pipe JSON messages line by line'));
+  console.log(pc.dim('  • file   ') + pc.white('- Read multi-line JSON from a file'));
+  console.log(pc.dim('  • inline ') + pc.white('- Format single JSON argument'));
+  console.log('');
 
-  # Read from file with relative path
-  npx claude-pretty-printer ./data/messages.json
+  console.log(pc.bold(pc.magenta('▶ MESSAGE FORMATS:')));
+  console.log('');
+  console.log(pc.dim('  Each line should be a complete JSON object representing an SDK message.'));
+  console.log(pc.dim('  Supported types: ') + pc.white('assistant, user, result, system, stream_event'));
+  console.log('');
 
-OPTIONS:
-  -h, --help    Show this help message
+  console.log(pc.bold(pc.blue('▶ OPTIONS:')));
+  console.log('');
+  console.log(pc.dim('  -h, --help    ') + pc.white('Show this help message'));
+  console.log('');
 
-DESCRIPTION:
-  Formats Claude Agent SDK JSON messages for beautiful CLI output.
-  Supports three input methods:
-    • stdin: Pipe JSON messages line by line
-    • file: Read multi-line JSON from a file
-    • inline: Format single JSON argument
+  console.log(pc.green('✨') + pc.dim(' Happy formatting!'));
+  console.log('');
 
-INPUT FORMATS:
-  • Stdin: Each line should be a complete JSON object
-  • File: File can contain multiple JSON objects (one per line)
-  • Inline: Single complete JSON object
-
-EXAMPLES:
-  # Pipe from Claude CLI
-  claude -p --output-format json "test" | npx claude-pretty-printer
-
-  # Format from file
-  npx claude-pretty-printer messages.json
-
-  # Format inline JSON
-  npx claude-pretty-printer '{"type":"result","subtype":"success","result":"Done"}'
-
-  # Mixed usage examples
-  cat log.json | grep "type.*assistant" | npx claude-pretty-printer
-  echo '{"type":"assistant","message":{"content":"Hello"}}' > msg.json && npx claude-pretty-printer msg.json
-`);
   process.exit(0);
 }
 
