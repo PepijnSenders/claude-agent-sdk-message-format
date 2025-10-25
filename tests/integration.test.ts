@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it } from 'bun:test';
 import { v4 as uuidv4 } from 'uuid';
-import { formatMessage } from '../src/index';
+import { formatMessage, getRawText } from '../src/index';
 
 describe('Integration Tests', () => {
   // Mock process.stdout.columns for consistent testing
@@ -198,5 +198,53 @@ describe('Integration Tests', () => {
     expect(results[0]).toContain('Hello!');
     expect(results[1]).toContain('◆ ASSISTANT');
     expect(results[1]).toContain('Hi there! How can I help you?');
+  });
+
+  it('should work with getRawText for extracting raw content', () => {
+    const userMessage = {
+      uuid: uuidv4() as `${string}-${string}-${string}-${string}`,
+      session_id: 'session-123',
+      type: 'user' as const,
+      message: {
+        role: 'user' as const,
+        content: 'Extract this content please',
+      },
+      parent_tool_use_id: null,
+    };
+
+    const assistantMessage = {
+      uuid: uuidv4() as `${string}-${string}-${string}-${string}`,
+      session_id: 'session-123',
+      type: 'assistant' as const,
+      message: {
+        role: 'assistant' as const,
+        content: { type: 'text', text: 'I extracted: test data' },
+      },
+      parent_tool_use_id: null,
+    };
+
+    const resultMessage = {
+      uuid: uuidv4() as `${string}-${string}-${string}-${string}`,
+      session_id: 'session-123',
+      type: 'result' as const,
+      result: {
+        type: 'success' as const,
+        output: { extracted: 'test data', count: 42 },
+      },
+      parent_tool_use_id: 'tool-123',
+    };
+
+    // Test getRawText functionality
+    expect(getRawText(userMessage)).toBe('Extract this content please');
+    expect(getRawText(assistantMessage)).toBe('I extracted: test data');
+    expect(getRawText(resultMessage)).toBe(JSON.stringify({ extracted: 'test data', count: 42 }));
+
+    // Ensure both functions work together
+    const rawTexts = [userMessage, assistantMessage, resultMessage].map(getRawText);
+    expect(rawTexts).toEqual([
+      'Extract this content please',
+      'I extracted: test data',
+      JSON.stringify({ extracted: 'test data', count: 42 }),
+    ]);
   });
 });

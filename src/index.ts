@@ -97,6 +97,67 @@ function formatToolParamValue(value: unknown): string {
 }
 
 /**
+ * Extracts raw text content from any SDK message type
+ * @param message The SDK message to extract content from
+ * @returns Raw text content as string, or empty string if no content
+ */
+export function getRawText(message: SDKMessage): string {
+  switch (message.type) {
+    case 'assistant':
+      if (message.message.content.type === 'text') {
+        return message.message.content.text;
+      }
+      if (message.message.content.type === 'tool_use') {
+        return `[Tool: ${message.message.content.name}]`;
+      }
+      // For assistant messages with mixed content, join text blocks
+      if (Array.isArray(message.message.content)) {
+        return message.message.content
+          .filter((block: { type: 'text' }) => (block as { type: 'text'; text: string }).text)
+          .map((block: { type: 'text' }) => (block as { type: 'text'; text: string }).text)
+          .join('\n');
+      }
+      return '';
+
+    case 'user':
+      if (message.message.role === 'user' && typeof message.message.content === 'string') {
+        return message.message.content;
+      }
+      if (message.message.role === 'user' && typeof message.message.content === 'object') {
+        return JSON.stringify(message.message.content);
+      }
+      return '';
+
+    case 'result':
+      if ('output' in message.result && message.result.output) {
+        return typeof message.result.output === 'string'
+          ? message.result.output
+          : JSON.stringify(message.result.output);
+      }
+      return '';
+
+    case 'system':
+      return 'system' in message && message.system ? message.system : '';
+
+    case 'stream_event':
+      // For streaming events, extract actual text content
+      if (message.event.type === 'text_delta' && message.event.delta?.text) {
+        return message.event.delta.text;
+      }
+      if (message.event.type === 'input_json_delta' && message.event.delta?.partial_json) {
+        return JSON.stringify(message.event.delta.partial_json);
+      }
+      return '';
+
+    default:
+      if ('type' in message) {
+        return ''; // Unknown but valid type
+      }
+      return ''; // Completely unknown type
+  }
+}
+
+/**
  * Validates required fields for different message types
  * @param message The SDK message to validate
  * @throws Error with helpful message if required fields are missing
