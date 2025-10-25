@@ -1,6 +1,6 @@
 {
   "name": "claude-pretty-printer",
-  "version": "1.0.4",
+  "version": "1.1.0",
   "description": "Beautiful CLI formatting for Claude Agent SDK messages with colors and boxes",
   "main": "dist/index.js",
   "module": "dist/index.mjs",

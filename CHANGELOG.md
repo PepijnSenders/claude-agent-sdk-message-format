@@ -1,5 +1,11 @@
 # claude-pretty-printer
 
+## 1.1.0
+
+### Minor Changes
+
+- Update and improve functionality
+
 ## 1.0.4
 
 ### Minor Changes
