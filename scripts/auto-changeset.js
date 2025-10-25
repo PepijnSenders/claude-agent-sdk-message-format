@@ -123,12 +123,7 @@ function hasExistingChangesets() {
 
 // Main function
 function main() {
-  console.log('🔍 Analyzing changes for automatic changeset creation...');
-
-  if (hasExistingChangesets()) {
-    console.log('ℹ️  Changesets already exist, skipping auto-creation');
-    return;
-  }
+  console.log('🔍 Analyzing changes for changeset creation...');
 
   const changedFiles = getChangedFiles();
   console.log(`📁 Found ${changedFiles.length} changed files`);
@@ -144,7 +139,15 @@ function main() {
   console.log(`📦 Detected change type: ${versionType}`);
   console.log(`📝 Description: ${description}`);
 
+  if (hasExistingChangesets()) {
+    console.log(
+      'ℹ️  Existing changesets found. Use "bun run changeset" to add more or "bun run version-packages" to version.'
+    );
+    return;
+  }
+
   createChangeset(versionType, description);
+  console.log('💡 Now run "bun run version-packages" to apply the version and update changelog');
 }
 
 main();
