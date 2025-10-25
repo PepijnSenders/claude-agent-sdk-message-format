@@ -1,8 +1,36 @@
-import { describe, expect, it } from 'bun:test';
+import { afterEach, beforeEach, describe, expect, it } from 'bun:test';
 import { v4 as uuidv4 } from 'uuid';
 import { formatMessage } from '../src/index';
 
 describe('Integration Tests', () => {
+  // Mock process.stdout.columns for consistent testing
+  const originalColumns = process.stdout.columns;
+  const originalIsTTY = process.stdout.isTTY;
+
+  beforeEach(() => {
+    // Set a fixed width for consistent test output
+    Object.defineProperty(process.stdout, 'columns', {
+      value: 80,
+      writable: true,
+    });
+    // Disable TTY to disable colors in tests
+    Object.defineProperty(process.stdout, 'isTTY', {
+      value: false,
+      writable: true,
+    });
+  });
+
+  afterEach(() => {
+    // Restore original columns and TTY
+    Object.defineProperty(process.stdout, 'columns', {
+      value: originalColumns,
+      writable: true,
+    });
+    Object.defineProperty(process.stdout, 'isTTY', {
+      value: originalIsTTY,
+      writable: true,
+    });
+  });
   it('should work with a typical conversation flow', () => {
     // Simulate a typical conversation with user message, assistant tool use, and tool result
 

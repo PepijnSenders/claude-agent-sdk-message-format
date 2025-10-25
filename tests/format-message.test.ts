@@ -6,6 +6,7 @@ import { formatMessage } from '../src/index';
 describe('formatMessage', () => {
   // Mock process.stdout.columns for consistent testing
   const originalColumns = process.stdout.columns;
+  const originalIsTTY = process.stdout.isTTY;
 
   beforeEach(() => {
     // Set a fixed width for consistent test output
@@ -13,12 +14,21 @@ describe('formatMessage', () => {
       value: 80,
       writable: true,
     });
+    // Disable TTY to disable colors in tests
+    Object.defineProperty(process.stdout, 'isTTY', {
+      value: false,
+      writable: true,
+    });
   });
 
   afterEach(() => {
-    // Restore original columns
+    // Restore original columns and TTY
     Object.defineProperty(process.stdout, 'columns', {
       value: originalColumns,
+      writable: true,
+    });
+    Object.defineProperty(process.stdout, 'isTTY', {
+      value: originalIsTTY,
       writable: true,
     });
   });
