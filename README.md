@@ -78,6 +78,141 @@ const messages = await getAgentMessages();
 messages.forEach(message => console.log(formatMessage(message)));
 ```
 
+### Hook Helpers
+
+Add beautiful formatted logging to your hooks with the `withLogging()` wrapper - an invisible enhancement that preserves your original hook configuration:
+
+```typescript
+import { withLogging } from 'claude-pretty-printer/hooks';
+import { query } from '@anthropic-ai/claude-agent-sdk';
+
+// Simple - just add logging to empty hooks
+const hooks = withLogging({
+  PreToolUse: [{}],
+  PostToolUse: [{}],
+});
+
+// Use them in your agent
+for await (const message of query({
+  prompt: 'Read package.json',
+  hooks,
+})) {
+  console.log(formatMessage(message));
+}
+```
+
+**Enhancing Existing Hooks:**
+
+The power of `withLogging()` is that it wraps your existing hooks transparently:
+
+```typescript
+import { withLogging } from 'claude-pretty-printer/hooks';
+
+// Your original hooks with custom logic
+const hooks = withLogging({
+  PreToolUse: [
+    {
+      matcher: '.*',
+      hooks: [
+        async (input, toolUseID, options) => {
+          // Your custom pre-tool logic here
+          console.log('About to execute:', input.name);
+          return {};
+        },
+      ],
+    },
+  ],
+  PostToolUse: [
+    {
+      matcher: 'Read|Write',
+      hooks: [
+        async (input, toolUseID, options) => {
+          // Your custom post-tool logic here
+          await logToDatabase(input);
+          return {};
+        },
+      ],
+    },
+  ],
+});
+
+// Now you get both: formatted logging + your custom behavior!
+```
+
+**Custom Options:**
+
+```typescript
+import { withLogging } from 'claude-pretty-printer/hooks';
+import fs from 'fs';
+
+// Use a custom logger (e.g., write to file)
+const hooks = withLogging(
+  {
+    PreToolUse: [{}],
+    PostToolUse: [{}],
+  },
+  {
+    logger: (msg) => fs.appendFileSync('hooks.log', msg + '\n'),
+  }
+);
+
+// Use raw JSON output instead of formatted
+const hooks = withLogging(
+  {
+    PreToolUse: [{}],
+  },
+  {
+    formatted: false, // Outputs JSON instead of formatted text
+  }
+);
+
+// Mix and match - some with logging, some without
+const hooks = {
+  ...withLogging({
+    PreToolUse: [{}],
+    PostToolUse: [{}],
+  }),
+  // These won't have automatic logging
+  Notification: [
+    {
+      matcher: '.*',
+      hooks: [async (input) => {
+        // Your custom notification handler
+        return {};
+      }],
+    },
+  ],
+};
+```
+
+**Alternative: Create Hooks from Scratch**
+
+If you prefer to create logging hooks without wrapping existing ones:
+
+```typescript
+import { createLoggingHooks, createSingleLoggingHook } from 'claude-pretty-printer/hooks';
+
+// Create formatted logging hooks for all hook types
+const hooks = createLoggingHooks();
+
+// Or create specific hook types only
+const hooks = createLoggingHooks({
+  hookTypes: ['PreToolUse', 'PostToolUse'],
+  matcher: 'Read|Write', // Only match specific tools
+});
+```
+
+**Available Hook Types:**
+- `PreToolUse` - Before tool execution
+- `PostToolUse` - After tool execution
+- `Notification` - System notifications
+- `UserPromptSubmit` - User prompt submissions
+- `SessionStart` - Session initialization
+- `SessionEnd` - Session termination
+- `Stop` - Stop hook triggers
+- `SubagentStop` - Subagent stop triggers
+- `PreCompact` - Before conversation compaction
+
 ### Command Line Interface
 
 Transform JSON output directly from Claude CLI or any other source:
@@ -136,6 +271,19 @@ npx claude-pretty-printer --help
 - Session initialization details
 - Conversation compaction notices
 - Hook execution results
+
+### Hook Callback Messages
+Specialized formatting for all Claude Agent SDK hook callbacks:
+
+- **🔧 PreToolUse** - Shows tool name and input parameters before execution
+- **✅ PostToolUse** - Displays tool response after execution (with truncation for long responses)
+- **🔔 Notification** - Shows notifications with optional titles and messages
+- **📝 UserPromptSubmit** - Displays user prompt submissions (with preview for long prompts)
+- **🚀 SessionStart** - Shows session startup with source type (startup/resume/clear/compact)
+- **🛑 SessionEnd** - Displays session termination with exit reason
+- **⏸️/🛑 Stop** - Shows stop hook triggers (active/inactive state)
+- **⏸️/🛑 SubagentStop** - Shows subagent stop hook triggers
+- **👆/🤖 PreCompact** - Shows pre-compaction events with trigger type (manual/auto) and custom instructions
 
 ### Stream Events
 Stream events are formatted inline without boxes for real-time output.
@@ -205,6 +353,49 @@ Token Usage:
   Cache Read: 2,000
   Cache Creation: 1,000
 ────────────────────────────────────────────────────────────
+```
+
+### Hook Callback Examples
+
+#### PreToolUse Hook
+```
+🔧 Pre-Tool Use: Bash
+   Working directory: /Users/ps/Documents/GitHub/claude-agent-sdk-message-format
+
+Tool input:
+  {
+    "command": "echo \"hello world\""
+  }
+```
+
+#### PostToolUse Hook
+```
+✅ Post-Tool Use: Read
+   Working directory: /Users/ps/Documents/GitHub/claude-agent-sdk-message-format
+
+Tool response:
+  {
+    "content": "File content here"
+  }
+```
+
+#### SessionStart Hook
+```
+🚀 Session Started (startup)
+   Transcript: /path/to/transcript.json
+   Working directory: /Users/ps/Documents/GitHub/claude-agent-sdk-message-format
+   Permission mode: default
+```
+
+#### Notification Hook
+```
+🔔 Notification
+   Build Completed
+
+Message:
+  Your build has completed successfully
+
+   Location: /Users/ps/Documents/GitHub/claude-agent-sdk-message-format
 ```
 
 ## Development

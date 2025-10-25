@@ -1,10 +1,22 @@
 # claude-pretty-printer
 
+## 1.2.0
+
+### Minor Changes
+
+- Add hook helpers API with `withLogging()`, `createLoggingHooks()`, and `createSingleLoggingHook()` for easy integration with Claude Agent SDK hooks
+- Add `getRawText()` utility function to extract raw text content from any SDK message type
+- Refactor codebase with modular architecture: separate formatters by message type, dedicated validation module, and utility functions
+- Add comprehensive hook callback formatting for all SDK hook types (PreToolUse, PostToolUse, Notification, UserPromptSubmit, SessionStart, SessionEnd, Stop, SubagentStop, PreCompact)
+- Add new `/hooks` export path for hook utilities
+- Expand test coverage with dedicated formatter tests and hook integration tests
+
 ## 1.1.0
 
 ### Minor Changes
 
-- Update and improve functionality
+- Fix system message handling to return empty string for null content instead of crashing
+- Fix test failures by disabling TTY colors in test environment to prevent color code interference
 
 ## 1.0.4
 

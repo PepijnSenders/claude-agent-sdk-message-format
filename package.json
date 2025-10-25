@@ -1,7 +1,8 @@
 {
   "name": "claude-pretty-printer",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Beautiful CLI formatting for Claude Agent SDK messages with colors and boxes",
+  "packageManager": "bun@1.1.42",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -10,6 +11,11 @@
       "types": "./dist/index.d.ts",
       "require": "./dist/index.js",
       "import": "./dist/index.mjs"
+    },
+    "./hooks": {
+      "types": "./dist/hooks.d.ts",
+      "require": "./dist/hooks.js",
+      "import": "./dist/hooks.mjs"
     }
   },
   "files": [
@@ -21,7 +27,7 @@
     "claude-pretty-printer": "dist/cli.js"
   },
   "scripts": {
-    "build": "tsup src/index.ts src/cli.ts --format cjs,esm --dts --clean --minify",
+    "build": "tsup src/index.ts src/cli.ts src/hooks.ts --format cjs,esm --dts --clean --minify",
     "test": "bun test",
     "prepublishOnly": "bun run build",
     "prepare": "husky",

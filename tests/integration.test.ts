@@ -202,7 +202,7 @@ describe('Integration Tests', () => {
 
   it('should work with getRawText for extracting raw content', () => {
     const userMessage = {
-      uuid: uuidv4() as `${string}-${string}-${string}-${string}`,
+      uuid: uuidv4() as `${string}-${string}-${string}-${string}-${string}`,
       session_id: 'session-123',
       type: 'user' as const,
       message: {
@@ -213,7 +213,7 @@ describe('Integration Tests', () => {
     };
 
     const assistantMessage = {
-      uuid: uuidv4() as `${string}-${string}-${string}-${string}`,
+      uuid: uuidv4() as `${string}-${string}-${string}-${string}-${string}`,
       session_id: 'session-123',
       type: 'assistant' as const,
       message: {
@@ -224,13 +224,32 @@ describe('Integration Tests', () => {
     };
 
     const resultMessage = {
-      uuid: uuidv4() as `${string}-${string}-${string}-${string}`,
+      uuid: uuidv4() as `${string}-${string}-${string}-${string}-${string}`,
       session_id: 'session-123',
       type: 'result' as const,
-      result: {
-        type: 'success' as const,
-        output: { extracted: 'test data', count: 42 },
+      subtype: 'success' as const,
+      duration_ms: 1000,
+      duration_api_ms: 800,
+      is_error: false,
+      num_turns: 1,
+      result: JSON.stringify({ extracted: 'test data', count: 42 }),
+      total_cost_usd: 0.001,
+      usage: {
+        input_tokens: 100,
+        output_tokens: 50,
       },
+      modelUsage: {
+        'claude-3-sonnet': {
+          inputTokens: 100,
+          outputTokens: 50,
+          cacheReadInputTokens: 0,
+          cacheCreationInputTokens: 0,
+          webSearchRequests: 0,
+          costUSD: 0.001,
+          contextWindow: 200000,
+        },
+      },
+      permission_denials: [],
       parent_tool_use_id: 'tool-123',
     };
 
