@@ -1,27 +1,27 @@
-import { describe, it, expect, beforeEach, afterEach } from 'bun:test';
-import { formatMessage } from '../src/index';
-import type { SDKMessage } from '@anthropic-ai/claude-agent-sdk';
-import { v4 as uuidv4 } from 'uuid';
+import { afterEach, beforeEach, describe, expect, it } from 'bun:test'
+import type { SDKMessage } from '@anthropic-ai/claude-agent-sdk'
+import { v4 as uuidv4 } from 'uuid'
+import { formatMessage } from '../src/index'
 
 describe('formatMessage', () => {
   // Mock process.stdout.columns for consistent testing
-  const originalColumns = process.stdout.columns;
+  const originalColumns = process.stdout.columns
 
   beforeEach(() => {
     // Set a fixed width for consistent test output
     Object.defineProperty(process.stdout, 'columns', {
       value: 80,
       writable: true,
-    });
-  });
+    })
+  })
 
   afterEach(() => {
     // Restore original columns
     Object.defineProperty(process.stdout, 'columns', {
       value: originalColumns,
       writable: true,
-    });
-  });
+    })
+  })
 
   describe('Assistant Messages', () => {
     it('should format text content', () => {
@@ -37,8 +37,8 @@ describe('formatMessage', () => {
           content: [
             {
               type: 'text',
-              text: 'Hello! How can I help you today?'
-            }
+              text: 'Hello! How can I help you today?',
+            },
           ],
           stop_reason: 'end_turn',
           stop_sequence: null,
@@ -48,14 +48,14 @@ describe('formatMessage', () => {
           },
         } as any,
         parent_tool_use_id: null,
-      };
+      }
 
-      const result = formatMessage(message);
+      const result = formatMessage(message)
 
-      expect(result).toContain('◆ ASSISTANT');
-      expect(result).toContain('Hello! How can I help you today?');
-      expect(result).toContain('─');
-    });
+      expect(result).toContain('◆ ASSISTANT')
+      expect(result).toContain('Hello! How can I help you today?')
+      expect(result).toContain('─')
+    })
 
     it('should format tool use blocks', () => {
       const message: SDKMessage = {
@@ -70,16 +70,16 @@ describe('formatMessage', () => {
           content: [
             {
               type: 'text',
-              text: 'Let me read that file for you.'
+              text: 'Let me read that file for you.',
             },
             {
               type: 'tool_use',
               id: 'tool_1',
               name: 'Read',
               input: {
-                file_path: '/path/to/file.txt'
-              }
-            }
+                file_path: '/path/to/file.txt',
+              },
+            },
           ],
           stop_reason: 'tool_use',
           stop_sequence: null,
@@ -89,15 +89,15 @@ describe('formatMessage', () => {
           },
         } as any,
         parent_tool_use_id: null,
-      };
+      }
 
-      const result = formatMessage(message);
+      const result = formatMessage(message)
 
-      expect(result).toContain('◆ ASSISTANT');
-      expect(result).toContain('Let me read that file for you.');
-      expect(result).toContain('→ Read');
-      expect(result).toContain('file_path: "/path/to/file.txt"');
-    });
+      expect(result).toContain('◆ ASSISTANT')
+      expect(result).toContain('Let me read that file for you.')
+      expect(result).toContain('→ Read')
+      expect(result).toContain('file_path: "/path/to/file.txt"')
+    })
 
     it('should format thinking content', () => {
       const message: SDKMessage = {
@@ -112,14 +112,14 @@ describe('formatMessage', () => {
           content: [
             {
               type: 'text',
-              text: 'I need to analyze this carefully.'
-            }
+              text: 'I need to analyze this carefully.',
+            },
           ],
           thinking: [
             {
               type: 'text',
-              text: 'Let me think about the best approach here...'
-            }
+              text: 'Let me think about the best approach here...',
+            },
           ],
           stop_reason: 'end_turn',
           stop_sequence: null,
@@ -129,15 +129,15 @@ describe('formatMessage', () => {
           },
         } as any,
         parent_tool_use_id: null,
-      };
+      }
 
-      const result = formatMessage(message);
+      const result = formatMessage(message)
 
-      expect(result).toContain('◆ ASSISTANT');
-      expect(result).toContain('I need to analyze this carefully.');
-      expect(result).toContain('[Thinking]');
-      expect(result).toContain('Let me think about the best approach here...');
-    });
+      expect(result).toContain('◆ ASSISTANT')
+      expect(result).toContain('I need to analyze this carefully.')
+      expect(result).toContain('[Thinking]')
+      expect(result).toContain('Let me think about the best approach here...')
+    })
 
     it('should format complex tool parameters', () => {
       const message: SDKMessage = {
@@ -159,10 +159,10 @@ describe('formatMessage', () => {
                 content: 'console.log("Hello, World!");',
                 options: {
                   overwrite: true,
-                  create_dirs: true
-                }
-              }
-            }
+                  create_dirs: true,
+                },
+              },
+            },
           ],
           stop_reason: 'tool_use',
           stop_sequence: null,
@@ -172,17 +172,17 @@ describe('formatMessage', () => {
           },
         } as any,
         parent_tool_use_id: null,
-      };
+      }
 
-      const result = formatMessage(message);
+      const result = formatMessage(message)
 
-      expect(result).toContain('→ Write');
-      expect(result).toContain('file_path: "/path/to/file.ts"');
-      expect(result).toContain('options:'); // Complex objects are formatted as JSON
-    });
+      expect(result).toContain('→ Write')
+      expect(result).toContain('file_path: "/path/to/file.ts"')
+      expect(result).toContain('options:') // Complex objects are formatted as JSON
+    })
 
     it('should truncate very long strings in tool parameters', () => {
-      const longString = 'x'.repeat(150);
+      const longString = 'x'.repeat(150)
       const message: SDKMessage = {
         uuid: uuidv4() as `${string}-${string}-${string}-${string}-${string}`,
         session_id: 'session-123',
@@ -198,9 +198,9 @@ describe('formatMessage', () => {
               id: 'tool_3',
               name: 'Process',
               input: {
-                long_text: longString
-              }
-            }
+                long_text: longString,
+              },
+            },
           ],
           stop_reason: 'tool_use',
           stop_sequence: null,
@@ -210,14 +210,14 @@ describe('formatMessage', () => {
           },
         } as any,
         parent_tool_use_id: null,
-      };
+      }
 
-      const result = formatMessage(message);
+      const result = formatMessage(message)
 
-      expect(result).toContain('...');
-      expect(result).not.toContain(longString); // Should be truncated
-    });
-  });
+      expect(result).toContain('...')
+      expect(result).not.toContain(longString) // Should be truncated
+    })
+  })
 
   describe('User Messages', () => {
     it('should format simple text messages', () => {
@@ -227,17 +227,17 @@ describe('formatMessage', () => {
         type: 'user',
         message: {
           role: 'user',
-          content: 'Can you help me with my code?'
+          content: 'Can you help me with my code?',
         },
         parent_tool_use_id: null,
-      };
+      }
 
-      const result = formatMessage(message);
+      const result = formatMessage(message)
 
-      expect(result).toContain('◆ USER');
-      expect(result).toContain('Can you help me with my code?');
-      expect(result).not.toContain('(Tool Results)');
-    });
+      expect(result).toContain('◆ USER')
+      expect(result).toContain('Can you help me with my code?')
+      expect(result).not.toContain('(Tool Results)')
+    })
 
     it('should format messages with tool results with special header', () => {
       const message: SDKMessage = {
@@ -251,19 +251,19 @@ describe('formatMessage', () => {
               type: 'tool_result',
               tool_use_id: 'tool_1',
               content: 'File content here',
-              is_error: false
-            }
-          ]
+              is_error: false,
+            },
+          ],
         },
         parent_tool_use_id: null,
-      };
+      }
 
-      const result = formatMessage(message);
+      const result = formatMessage(message)
 
-      expect(result).toContain('◆ USER (Tool Results)');
-      expect(result).toContain('✓ Tool result: tool_1');
-      expect(result).toContain('File content here');
-    });
+      expect(result).toContain('◆ USER (Tool Results)')
+      expect(result).toContain('✓ Tool result: tool_1')
+      expect(result).toContain('File content here')
+    })
 
     it('should format tool results with errors', () => {
       const message: SDKMessage = {
@@ -277,20 +277,20 @@ describe('formatMessage', () => {
               type: 'tool_result',
               tool_use_id: 'tool_2',
               content: 'File not found',
-              is_error: true
-            }
-          ]
+              is_error: true,
+            },
+          ],
         },
         parent_tool_use_id: null,
-      };
+      }
 
-      const result = formatMessage(message);
+      const result = formatMessage(message)
 
-      expect(result).toContain('◆ USER (Tool Results)');
-      expect(result).toContain('✗ Tool result: tool_2');
-      expect(result).toContain('File not found');
-      expect(result).toContain('✗ Error in tool execution');
-    });
+      expect(result).toContain('◆ USER (Tool Results)')
+      expect(result).toContain('✗ Tool result: tool_2')
+      expect(result).toContain('File not found')
+      expect(result).toContain('✗ Error in tool execution')
+    })
 
     it('should format mixed content with text and tool results', () => {
       const message: SDKMessage = {
@@ -305,19 +305,19 @@ describe('formatMessage', () => {
               type: 'tool_result',
               tool_use_id: 'tool_3',
               content: 'Analysis completed successfully',
-              is_error: false
-            }
-          ]
+              is_error: false,
+            },
+          ],
         },
         parent_tool_use_id: null,
-      };
+      }
 
-      const result = formatMessage(message);
+      const result = formatMessage(message)
 
-      expect(result).toContain('◆ USER (Tool Results)');
-      expect(result).toContain('Here is the result of my analysis:');
-      expect(result).toContain('✓ Tool result: tool_3');
-    });
+      expect(result).toContain('◆ USER (Tool Results)')
+      expect(result).toContain('Here is the result of my analysis:')
+      expect(result).toContain('✓ Tool result: tool_3')
+    })
 
     it('should format synthetic user messages', () => {
       const message: SDKMessage = {
@@ -326,17 +326,17 @@ describe('formatMessage', () => {
         type: 'user',
         message: {
           role: 'user',
-          content: 'This is a synthetic message'
+          content: 'This is a synthetic message',
         },
         parent_tool_use_id: null,
         isSynthetic: true,
-      };
+      }
 
-      const result = formatMessage(message);
+      const result = formatMessage(message)
 
-      expect(result).toContain('[Synthetic]');
-      expect(result).toContain('This is a synthetic message');
-    });
+      expect(result).toContain('[Synthetic]')
+      expect(result).toContain('This is a synthetic message')
+    })
 
     it('should skip replay messages', () => {
       const message: SDKMessage = {
@@ -345,17 +345,17 @@ describe('formatMessage', () => {
         type: 'user',
         message: {
           role: 'user',
-          content: 'This should not appear'
+          content: 'This should not appear',
         },
         parent_tool_use_id: null,
         isReplay: true,
-      };
+      }
 
-      const result = formatMessage(message);
+      const result = formatMessage(message)
 
-      expect(result).toBe('');
-    });
-  });
+      expect(result).toBe('')
+    })
+  })
 
   describe('Result Messages', () => {
     it('should format success results', () => {
@@ -385,24 +385,24 @@ describe('formatMessage', () => {
             webSearchRequests: 0,
             costUSD: 0.0123,
             contextWindow: 200000,
-          }
+          },
         },
         permission_denials: [],
-      };
+      }
 
-      const result = formatMessage(message);
+      const result = formatMessage(message)
 
-      expect(result).toContain('◆ RESULT');
-      expect(result).toContain('✓ Task completed successfully');
-      expect(result).toContain('Duration: 5.00s');
-      expect(result).toContain('API Time: 3.00s');
-      expect(result).toContain('Turns: 5');
-      expect(result).toContain('Cost: $0.0123');
-      expect(result).toContain('Input: 5,000');
-      expect(result).toContain('Output: 1,200');
-      expect(result).toContain('Cache Read: 1,000');
-      expect(result).toContain('Cache Creation: 500');
-    });
+      expect(result).toContain('◆ RESULT')
+      expect(result).toContain('✓ Task completed successfully')
+      expect(result).toContain('Duration: 5.00s')
+      expect(result).toContain('API Time: 3.00s')
+      expect(result).toContain('Turns: 5')
+      expect(result).toContain('Cost: $0.0123')
+      expect(result).toContain('Input: 5,000')
+      expect(result).toContain('Output: 1,200')
+      expect(result).toContain('Cache Read: 1,000')
+      expect(result).toContain('Cache Creation: 500')
+    })
 
     it('should format error results', () => {
       const message: SDKMessage = {
@@ -421,15 +421,15 @@ describe('formatMessage', () => {
         },
         modelUsage: {},
         permission_denials: [],
-      };
+      }
 
-      const result = formatMessage(message);
+      const result = formatMessage(message)
 
-      expect(result).toContain('◆ RESULT');
-      expect(result).toContain('✗ Error: Maximum turns reached');
-      expect(result).toContain('Duration: 10.00s');
-      expect(result).toContain('Cost: $0.1234');
-    });
+      expect(result).toContain('◆ RESULT')
+      expect(result).toContain('✗ Error: Maximum turns reached')
+      expect(result).toContain('Duration: 10.00s')
+      expect(result).toContain('Cost: $0.1234')
+    })
 
     it('should format permission denials', () => {
       const message: SDKMessage = {
@@ -442,7 +442,7 @@ describe('formatMessage', () => {
         is_error: false,
         num_turns: 3,
         result: 'Task completed',
-        total_cost_usd: 0.0050,
+        total_cost_usd: 0.005,
         usage: {
           input_tokens: 1000,
           output_tokens: 500,
@@ -452,18 +452,18 @@ describe('formatMessage', () => {
           {
             tool_name: 'FileSystem',
             tool_use_id: 'tool_dangerous',
-            tool_input: {}
-          }
+            tool_input: {},
+          },
         ] as any,
-      };
+      }
 
-      const result = formatMessage(message);
+      const result = formatMessage(message)
 
-      expect(result).toContain('◆ RESULT');
-      expect(result).toContain('Permission Denials: 1');
-      expect(result).toContain('• FileSystem (tool_dangerous)');
-    });
-  });
+      expect(result).toContain('◆ RESULT')
+      expect(result).toContain('Permission Denials: 1')
+      expect(result).toContain('• FileSystem (tool_dangerous)')
+    })
+  })
 
   describe('System Messages', () => {
     it('should format init messages', () => {
@@ -492,23 +492,23 @@ describe('formatMessage', () => {
         agents: ['code-analyzer'],
         skills: ['javascript', 'typescript'],
         output_style: 'verbose',
-      };
+      }
 
-      const result = formatMessage(message);
+      const result = formatMessage(message)
 
-      expect(result).toContain('◆ SYSTEM');
-      expect(result).toContain('Claude Code Session Initialized');
-      expect(result).toContain('Version: 1.0.0');
-      expect(result).toContain('Model: claude-3-sonnet');
-      expect(result).toContain('Working Directory: /path/to/project');
-      expect(result).toContain('Permission Mode: default');
-      expect(result).toContain('Available Tools: 3');
-      expect(result).toContain('✓ filesystem (connected)');
-      expect(result).toContain('✗ database (failed)');
-      expect(result).toContain('Slash Commands: help, clear');
-      expect(result).toContain('Agents: code-analyzer');
-      expect(result).toContain('Skills: javascript, typescript');
-    });
+      expect(result).toContain('◆ SYSTEM')
+      expect(result).toContain('Claude Code Session Initialized')
+      expect(result).toContain('Version: 1.0.0')
+      expect(result).toContain('Model: claude-3-sonnet')
+      expect(result).toContain('Working Directory: /path/to/project')
+      expect(result).toContain('Permission Mode: default')
+      expect(result).toContain('Available Tools: 3')
+      expect(result).toContain('✓ filesystem (connected)')
+      expect(result).toContain('✗ database (failed)')
+      expect(result).toContain('Slash Commands: help, clear')
+      expect(result).toContain('Agents: code-analyzer')
+      expect(result).toContain('Skills: javascript, typescript')
+    })
 
     it('should format compact boundary messages', () => {
       const message: SDKMessage = {
@@ -520,14 +520,14 @@ describe('formatMessage', () => {
           trigger: 'manual',
           pre_tokens: 150000,
         },
-      };
+      }
 
-      const result = formatMessage(message);
+      const result = formatMessage(message)
 
-      expect(result).toContain('◆ SYSTEM');
-      expect(result).toContain('⚡ Conversation Compacted (manual)');
-      expect(result).toContain('Previous tokens: 150,000');
-    });
+      expect(result).toContain('◆ SYSTEM')
+      expect(result).toContain('⚡ Conversation Compacted (manual)')
+      expect(result).toContain('Previous tokens: 150,000')
+    })
 
     it('should format hook responses', () => {
       const message: SDKMessage = {
@@ -540,19 +540,19 @@ describe('formatMessage', () => {
         stdout: 'Hook executed successfully',
         stderr: 'Warning: deprecated API used',
         exit_code: 0,
-      };
+      }
 
-      const result = formatMessage(message);
+      const result = formatMessage(message)
 
-      expect(result).toContain('◆ SYSTEM');
-      expect(result).toContain('⚙ Hook: pre-execution (before_tool_use)');
-      expect(result).toContain('stdout:');
-      expect(result).toContain('Hook executed successfully');
-      expect(result).toContain('stderr:');
-      expect(result).toContain('Warning: deprecated API used');
-      expect(result).toContain('✓ Exit code: 0');
-    });
-  });
+      expect(result).toContain('◆ SYSTEM')
+      expect(result).toContain('⚙ Hook: pre-execution (before_tool_use)')
+      expect(result).toContain('stdout:')
+      expect(result).toContain('Hook executed successfully')
+      expect(result).toContain('stderr:')
+      expect(result).toContain('Warning: deprecated API used')
+      expect(result).toContain('✓ Exit code: 0')
+    })
+  })
 
   describe('Stream Events', () => {
     it('should format text delta events', () => {
@@ -564,18 +564,18 @@ describe('formatMessage', () => {
           type: 'content_block_delta',
           delta: {
             type: 'text_delta',
-            text: 'Hello'
-          }
+            text: 'Hello',
+          },
         },
         parent_tool_use_id: null,
-      };
+      }
 
-      const result = formatMessage(message);
+      const result = formatMessage(message)
 
-      expect(result).toBe('Hello');
-      expect(result).not.toContain('◆');
-      expect(result).not.toContain('─');
-    });
+      expect(result).toBe('Hello')
+      expect(result).not.toContain('◆')
+      expect(result).not.toContain('─')
+    })
 
     it('should format tool use start events', () => {
       const message: SDKMessage = {
@@ -587,16 +587,16 @@ describe('formatMessage', () => {
           content_block: {
             type: 'tool_use',
             id: 'tool_1',
-            name: 'Read'
-          }
+            name: 'Read',
+          },
         },
         parent_tool_use_id: null,
-      };
+      }
 
-      const result = formatMessage(message);
+      const result = formatMessage(message)
 
-      expect(result).toContain('[Starting tool: Read]');
-    });
+      expect(result).toContain('[Starting tool: Read]')
+    })
 
     it('should return empty string for events that should be silent', () => {
       const message: SDKMessage = {
@@ -604,16 +604,16 @@ describe('formatMessage', () => {
         session_id: 'session-123',
         type: 'stream_event',
         event: {
-          type: 'message_start'
+          type: 'message_start',
         },
         parent_tool_use_id: null,
-      };
+      }
 
-      const result = formatMessage(message);
+      const result = formatMessage(message)
 
-      expect(result).toBe('');
-    });
-  });
+      expect(result).toBe('')
+    })
+  })
 
   describe('Unknown Message Types', () => {
     it('should handle unknown message types gracefully', () => {
@@ -622,16 +622,16 @@ describe('formatMessage', () => {
         session_id: 'session-123',
         type: 'unknown_type' as any,
         message: {
-          content: 'Unknown content'
-        }
-      } as any;
+          content: 'Unknown content',
+        },
+      } as any
 
-      const result = formatMessage(message);
+      const result = formatMessage(message)
 
-      expect(result).toContain('◆ UNKNOWN');
-      expect(result).toContain('[Unknown message type: unknown_type]');
-    });
-  });
+      expect(result).toContain('◆ UNKNOWN')
+      expect(result).toContain('[Unknown message type: unknown_type]')
+    })
+  })
 
   describe('Box Options', () => {
     it('should format without box when showBox is false', () => {
@@ -641,17 +641,17 @@ describe('formatMessage', () => {
         type: 'user',
         message: {
           role: 'user',
-          content: 'No box for this message'
+          content: 'No box for this message',
         },
         parent_tool_use_id: null,
-      };
+      }
 
-      const result = formatMessage(message, false);
+      const result = formatMessage(message, false)
 
-      expect(result).toContain('No box for this message');
-      expect(result).not.toContain('─');
-      expect(result).not.toContain('◆ USER');
-    });
+      expect(result).toContain('No box for this message')
+      expect(result).not.toContain('─')
+      expect(result).not.toContain('◆ USER')
+    })
 
     it('should format with box when showBox is true (default)', () => {
       const message: SDKMessage = {
@@ -660,18 +660,18 @@ describe('formatMessage', () => {
         type: 'user',
         message: {
           role: 'user',
-          content: 'Box for this message'
+          content: 'Box for this message',
         },
         parent_tool_use_id: null,
-      };
+      }
 
-      const result = formatMessage(message, true);
+      const result = formatMessage(message, true)
 
-      expect(result).toContain('Box for this message');
-      expect(result).toContain('─');
-      expect(result).toContain('◆ USER');
-    });
-  });
+      expect(result).toContain('Box for this message')
+      expect(result).toContain('─')
+      expect(result).toContain('◆ USER')
+    })
+  })
 
   describe('Edge Cases', () => {
     it('should handle empty content gracefully', () => {
@@ -681,16 +681,16 @@ describe('formatMessage', () => {
         type: 'user',
         message: {
           role: 'user',
-          content: ''
+          content: '',
         },
         parent_tool_use_id: null,
-      };
+      }
 
-      const result = formatMessage(message);
+      const result = formatMessage(message)
 
       // Empty content should return empty (no box needed)
-      expect(result).toBe('');
-    });
+      expect(result).toBe('')
+    })
 
     it('should handle null/undefined tool parameters', () => {
       const message: SDKMessage = {
@@ -712,9 +712,9 @@ describe('formatMessage', () => {
                 optional_value: undefined,
                 number_value: 42,
                 boolean_value: true,
-                string_value: 'test'
-              }
-            }
+                string_value: 'test',
+              },
+            },
           ],
           stop_reason: 'tool_use',
           stop_sequence: null,
@@ -724,15 +724,15 @@ describe('formatMessage', () => {
           },
         } as any,
         parent_tool_use_id: null,
-      };
+      }
 
-      const result = formatMessage(message);
+      const result = formatMessage(message)
 
-      expect(result).toContain('value: null');
-      expect(result).toContain('optional_value: undefined');
-      expect(result).toContain('number_value: 42');
-      expect(result).toContain('boolean_value: true');
-      expect(result).toContain('string_value: "test"');
-    });
-  });
-});
+      expect(result).toContain('value: null')
+      expect(result).toContain('optional_value: undefined')
+      expect(result).toContain('number_value: 42')
+      expect(result).toContain('boolean_value: true')
+      expect(result).toContain('string_value: "test"')
+    })
+  })
+})

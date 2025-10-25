@@ -4,8 +4,8 @@
  * Run: bun examples/basic.ts
  */
 
-import { formatMessage } from '../src/index';
-import type { SDKMessage } from '@anthropic-ai/claude-agent-sdk';
+import type { SDKMessage } from '@anthropic-ai/claude-agent-sdk'
+import { formatMessage } from '../src/index'
 
 // Example assistant message with tool use
 const assistantMessage: SDKMessage = {
@@ -39,7 +39,7 @@ const assistantMessage: SDKMessage = {
     },
   } as any,
   parent_tool_use_id: null,
-};
+}
 
 // Example user message with tool result
 const userMessage: SDKMessage = {
@@ -68,7 +68,7 @@ const userMessage: SDKMessage = {
     ],
   },
   parent_tool_use_id: null,
-};
+}
 
 // Example result message
 const resultMessage: SDKMessage = {
@@ -100,17 +100,17 @@ const resultMessage: SDKMessage = {
     },
   },
   permission_denials: [],
-};
+}
 
-console.log('='.repeat(80));
-console.log('CLAUDE PRETTY PRINTER - EXAMPLE OUTPUT');
-console.log('='.repeat(80));
-console.log();
+console.log('='.repeat(80))
+console.log('CLAUDE PRETTY PRINTER - EXAMPLE OUTPUT')
+console.log('='.repeat(80))
+console.log()
 
-console.log(formatMessage(assistantMessage));
-console.log();
+console.log(formatMessage(assistantMessage))
+console.log()
 
-console.log(formatMessage(userMessage));
-console.log();
+console.log(formatMessage(userMessage))
+console.log()
 
-console.log(formatMessage(resultMessage));
+console.log(formatMessage(resultMessage))
