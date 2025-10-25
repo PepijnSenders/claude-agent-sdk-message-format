@@ -506,3 +506,4 @@ function formatStreamEvent(message: Extract<SDKMessage, { type: 'stream_event' }
       return '';
   }
 }
+// Test change

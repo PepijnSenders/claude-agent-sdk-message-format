@@ -1,4 +1,4 @@
-name: Release
+name: Publish to npm
 
 on:
   push:
@@ -6,20 +6,15 @@ on:
   workflow_dispatch:
 
 jobs:
-  release:
-    name: Release
+  publish:
     runs-on: ubuntu-latest
     permissions:
       contents: write
       id-token: write
-      pull-requests: write
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -35,33 +30,44 @@ jobs:
       - name: Install dependencies
         run: bun install
 
-      - name: Configure Git
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-
-      - name: Create Release Pull Request or Publish
-        id: changesets
-        uses: changesets/action@v1
-        with:
-          publish: bun run release
-          commit: "chore: update versions"
-          title: "chore: update versions"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
       - name: Build package
-        if: steps.changesets.outputs.published == 'true'
         run: bun run build
 
+      - name: Check if version has changed
+        id: version-check
+        run: |
+          CURRENT_VERSION=$(node -p "require('./package.json').version")
+          PUBLISHED_VERSION=$(npm view claude-pretty-printer version 2>/dev/null || echo "0.0.0")
+
+          echo "current-version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+          echo "published-version=$PUBLISHED_VERSION" >> $GITHUB_OUTPUT
+          echo "Current version: $CURRENT_VERSION"
+          echo "Published version: $PUBLISHED_VERSION"
+
+          if [ "$CURRENT_VERSION" != "$PUBLISHED_VERSION" ]; then
+            echo "should-publish=true" >> $GITHUB_OUTPUT
+          else
+            echo "should-publish=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Publish to npm
+        if: steps.version-check.outputs.should-publish == 'true'
+        run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Skip publish (version already published)
+        if: steps.version-check.outputs.should-publish == 'false'
+        run: |
+          echo "Version ${{ steps.version-check.outputs.current-version }} is already published"
+          echo "Skipping npm publish"
+
       - name: Create GitHub Release
-        if: steps.changesets.outputs.published == 'true'
+        if: steps.version-check.outputs.should-publish == 'true'
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: v${{ steps.changesets.outputs.publishedPackages }}
-          name: Release v${{ steps.changesets.outputs.publishedPackages }}
+          tag_name: v${{ steps.version-check.outputs.current-version }}
+          name: Release v${{ steps.version-check.outputs.current-version }}
           draft: false
           prerelease: false
           generate_release_notes: true
@@ -69,5 +75,6 @@ jobs:
             dist/**
             README.md
             LICENSE
+            CHANGELOG.md
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
