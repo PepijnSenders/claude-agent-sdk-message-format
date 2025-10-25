@@ -1,6 +1,6 @@
-import { describe, expect, it } from 'bun:test'
-import { v4 as uuidv4 } from 'uuid'
-import { formatMessage } from '../src/index'
+import { describe, expect, it } from 'bun:test';
+import { v4 as uuidv4 } from 'uuid';
+import { formatMessage } from '../src/index';
 
 describe('Integration Tests', () => {
   it('should work with a typical conversation flow', () => {
@@ -15,7 +15,7 @@ describe('Integration Tests', () => {
         content: 'Please read the package.json file for me',
       },
       parent_tool_use_id: null,
-    }
+    };
 
     const assistantMessage = {
       uuid: uuidv4() as `${string}-${string}-${string}-${string}-${string}`,
@@ -48,7 +48,7 @@ describe('Integration Tests', () => {
         },
       } as any,
       parent_tool_use_id: null,
-    }
+    };
 
     const toolResultMessage = {
       uuid: uuidv4() as `${string}-${string}-${string}-${string}-${string}`,
@@ -77,29 +77,29 @@ describe('Integration Tests', () => {
         ],
       },
       parent_tool_use_id: null,
-    }
+    };
 
-    const userResult = formatMessage(userMessage)
-    const assistantResult = formatMessage(assistantMessage)
-    const toolResultResult = formatMessage(toolResultMessage)
+    const userResult = formatMessage(userMessage);
+    const assistantResult = formatMessage(assistantMessage);
+    const toolResultResult = formatMessage(toolResultMessage);
 
     // Verify user message
-    expect(userResult).toContain('◆ USER')
-    expect(userResult).toContain('Please read the package.json file for me')
-    expect(userResult).not.toContain('(Tool Results)')
+    expect(userResult).toContain('◆ USER');
+    expect(userResult).toContain('Please read the package.json file for me');
+    expect(userResult).not.toContain('(Tool Results)');
 
     // Verify assistant message
-    expect(assistantResult).toContain('◆ ASSISTANT')
-    expect(assistantResult).toContain("I'll read the package.json file for you")
-    expect(assistantResult).toContain('→ Read')
-    expect(assistantResult).toContain('file_path: "./package.json"')
+    expect(assistantResult).toContain('◆ ASSISTANT');
+    expect(assistantResult).toContain("I'll read the package.json file for you");
+    expect(assistantResult).toContain('→ Read');
+    expect(assistantResult).toContain('file_path: "./package.json"');
 
     // Verify tool result message
-    expect(toolResultResult).toContain('◆ USER (Tool Results)')
-    expect(toolResultResult).toContain('✓ Tool result: tool_1')
-    expect(toolResultResult).toContain('test-package')
-    expect(toolResultResult).toContain('1.0.0')
-  })
+    expect(toolResultResult).toContain('◆ USER (Tool Results)');
+    expect(toolResultResult).toContain('✓ Tool result: tool_1');
+    expect(toolResultResult).toContain('test-package');
+    expect(toolResultResult).toContain('1.0.0');
+  });
 
   it('should handle multiple tool results in one message', () => {
     const multiToolMessage = {
@@ -124,17 +124,17 @@ describe('Integration Tests', () => {
         ],
       },
       parent_tool_use_id: null,
-    }
+    };
 
-    const result = formatMessage(multiToolMessage)
+    const result = formatMessage(multiToolMessage);
 
-    expect(result).toContain('◆ USER (Tool Results)')
-    expect(result).toContain('✓ Tool result: tool_1')
-    expect(result).toContain('✗ Tool result: tool_2')
-    expect(result).toContain('First tool completed successfully')
-    expect(result).toContain('Second tool failed')
-    expect(result).toContain('✗ Error in tool execution')
-  })
+    expect(result).toContain('◆ USER (Tool Results)');
+    expect(result).toContain('✓ Tool result: tool_1');
+    expect(result).toContain('✗ Tool result: tool_2');
+    expect(result).toContain('First tool completed successfully');
+    expect(result).toContain('Second tool failed');
+    expect(result).toContain('✗ Error in tool execution');
+  });
 
   it('should handle processing multiple messages in sequence', () => {
     const messages = [
@@ -161,14 +161,14 @@ describe('Integration Tests', () => {
         } as any,
         parent_tool_use_id: null,
       },
-    ]
+    ];
 
-    const results = messages.map((msg) => formatMessage(msg))
+    const results = messages.map((msg) => formatMessage(msg));
 
-    expect(results).toHaveLength(2)
-    expect(results[0]).toContain('◆ USER')
-    expect(results[0]).toContain('Hello!')
-    expect(results[1]).toContain('◆ ASSISTANT')
-    expect(results[1]).toContain('Hi there! How can I help you?')
-  })
-})
+    expect(results).toHaveLength(2);
+    expect(results[0]).toContain('◆ USER');
+    expect(results[0]).toContain('Hello!');
+    expect(results[1]).toContain('◆ ASSISTANT');
+    expect(results[1]).toContain('Hi there! How can I help you?');
+  });
+});

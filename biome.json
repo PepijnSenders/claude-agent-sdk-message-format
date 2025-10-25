@@ -28,7 +28,7 @@
     "formatter": {
       "jsxQuoteStyle": "double",
       "quoteProperties": "asNeeded",
-      "semicolons": "asNeeded",
+      "semicolons": "always",
       "trailingCommas": "es5",
       "quoteStyle": "single"
     }
